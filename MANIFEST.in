@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include tambahan *.css
+recursive-include tambahan *.csv
+recursive-include tambahan *.html
+recursive-include tambahan *.ico
+recursive-include tambahan *.js
+recursive-include tambahan *.json
+recursive-include tambahan *.md
+recursive-include tambahan *.png
+recursive-include tambahan *.py
+recursive-include tambahan *.svg
+recursive-include tambahan *.txt
+recursive-exclude tambahan *.pyc
