@@ -7,7 +7,7 @@ frappe.ui.form.on('Est Tools', {
 		if(frm.doc.docstatus==1) {
 			cur_frm.add_custom_button(__('Make BOM'), cur_frm.cscript['Make BOM'], "icon-exclamation", "btn-default");
 		};
-		
+
 		calculate_total_quantity(frm);
 		calculate_total_secondary(frm);
 	},
@@ -46,7 +46,7 @@ cur_frm.set_query("item_code", "item_utama",  function (doc, cdt, cdn) {
         }
     }
 });
-*/
+
 /* item_utama */
 cur_frm.cscript.factor_1 = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
@@ -108,25 +108,44 @@ frappe.ui.form.on("Est Tools", "faktor_primary", function(frm) {
 	calculate_excess_amount(frm);
 })
 
+//frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn) {
+//	row = locals[cdt][cdn];
+//	frappe.call({
+//		method: "frappe.client.get",
+//		args: {
+//			doctype: "Item Price",
+//			filters: {
+//				"item_code": row.item_code,
+//				"price_list": "Standard Selling"
+//			}
+//		},
+//		callback: function (data) {
+//			if(!data.exc){
+//				frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate);
+//				frappe.model.set_value(cdt, cdn, "quantity", "1");
+//			}
+//		}
+//	})
+//})
 frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn) {
-	row = locals[cdt][cdn];
-	frappe.call({
-		method: "frappe.client.get",
-		args: {
-			doctype: "Item Price",
-			filters: {
-				"item_code": row.item_code,
-				"price_list": "Standard Selling"
-			}
-		},
-		callback: function (data) {
-			if(!data.exc){
-				frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate);
-				frappe.model.set_value(cdt, cdn, "quantity", "1");
-			}
-		}
-	})
-})
+    row = locals[cdt][cdn];
+    frappe.call({
+        method: "frappe.client.get_value",
+        args: {
+            doctype: "Item Price",
+            fieldname: "price_list_rate",
+            filters: {
+            "item_code": row.item_code,
+            "price_list": "Standard Selling"
+            }
+        },
+        callback: function (data) {
+            frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
+				refresh_field()
+				}
+    })
+});
+
 
 cur_frm.cscript.si_qty = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
