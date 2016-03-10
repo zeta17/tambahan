@@ -19,10 +19,11 @@ class EstTools(Document):
 		#pass
 		#frappe.throw(_("Anda pilih: "+self.item_name))
 	def get_details(self):
-		dl = frappe.db.sql("""select b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount
+		dl = frappe.db.sql("""select b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount, b2.item_group
 			from
-				`tabBOM Item` b1
+				`tabBOM Item` b1, `tabItem` b2
 			where
+				b1.item_code = b2.item_code and
 				b1.parent = %s
 			order by b1.idx ASC""", self.bill_of_material, as_dict=1)
 		
@@ -30,6 +31,7 @@ class EstTools(Document):
 		
 		for d in dl:
 			nl = self.append('item_utama', {})
+			nl.item_group = d.item_group
 			nl.item_code = d.item_code
 			nl.item_name = d.item_name
 			nl.quantity = d.qty
@@ -42,11 +44,7 @@ class EstTools(Document):
 			nl.factor_2 = "1"
 			nl.factor_3 = "1"
 			nl.factor_4 = "1"
-			nl.factor_5 = "1"
-			
-	def make_bom(self):
-		frappe.msgprint("Hai, Behind you")
-	
+			nl.factor_5 = "1"	
 			
 @frappe.whitelist()
 def test_method(source_name, target_doc=None):
@@ -80,3 +78,16 @@ def test_method(source_name, target_doc=None):
 	}, target_doc)
 	
 	return doc
+
+@frappe.whitelist()
+def make_estimate(source_name, target_doc=None):
+	est = get_mapped_doc("Quotation Item", source_name, {
+		"Quotation": {
+			"doctype": "Est Tools",
+			"field_map": {
+				"quantity": "qty"
+			},
+		},
+	}, target_doc)
+	
+	return est
