@@ -37,12 +37,20 @@ cur_frm.set_query('item_code', function () {
         }
     }
 });
-
+*/
 cur_frm.set_query("item_code", "item_utama",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
-            'item_group': 'Raw Material'
+            'item_group': c_doc.item_group
+        }
+    }
+});
+cur_frm.set_query("item_code", "item_tambahan",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'item_group': c_doc.item_group
         }
     }
 });
@@ -135,14 +143,32 @@ frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn)
             doctype: "Item Price",
             fieldname: "price_list_rate",
             filters: {
-            "item_code": row.item_code,
-            "price_list": "Standard Selling"
+				"item_code": row.item_code,
+				"price_list": "Standard Selling"
             }
         },
         callback: function (data) {
             frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
-				refresh_field()
-				}
+			refresh_field()
+		}
+    })
+});
+frappe.ui.form.on("Est Tools Secondary Item", "item_code", function(frm, cdt, cdn) {
+    row = locals[cdt][cdn];
+    frappe.call({
+        method: "frappe.client.get_value",
+        args: {
+            doctype: "Item Price",
+            fieldname: "price_list_rate",
+            filters: {
+				"item_code": row.item_code,
+				"price_list": "Standard Selling"
+            }
+        },
+        callback: function (data) {
+            frappe.model.set_value(cdt, cdn, "si_price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
+			refresh_field()
+		}
     })
 });
 
