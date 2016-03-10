@@ -38,6 +38,15 @@ cur_frm.set_query('item_code', function () {
     }
 });
 */
+// filter BOM dari item
+cur_frm.set_query('bill_of_material', function (frm) {
+    return {
+        filters: {
+            'item': frm.item_code
+        }
+    }
+});
+
 cur_frm.set_query("item_code", "item_utama",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
@@ -148,8 +157,9 @@ frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn)
             }
         },
         callback: function (data) {
+			refresh_field();
             frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
-			refresh_field()
+			//refresh_field()
 		}
     })
 });
