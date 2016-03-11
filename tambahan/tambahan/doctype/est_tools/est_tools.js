@@ -146,6 +146,7 @@ frappe.ui.form.on("Est Tools", "faktor_primary", function(frm) {
 //})
 frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn) {
     row = locals[cdt][cdn];
+	frappe.model.set_value(cdt, cdn, "price_list_rate", "0");
     frappe.call({
         method: "frappe.client.get_value",
         args: {
@@ -157,7 +158,6 @@ frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn)
             }
         },
         callback: function (data) {
-			refresh_field('price_list_rate', row.name, 'item_utama');
             frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
 			//refresh_field()
 		}

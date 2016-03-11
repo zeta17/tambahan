@@ -19,7 +19,7 @@ class EstTools(Document):
 		#pass
 		#frappe.throw(_("Anda pilih: "+self.item_name))
 	def get_details(self):
-		dl = frappe.db.sql("""select b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount, b2.item_group
+		komponen = frappe.db.sql("""select b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount, b2.item_group
 			from
 				`tabBOM Item` b1, `tabItem` b2
 			where
@@ -29,7 +29,7 @@ class EstTools(Document):
 		
 		self.set('item_utama', [])
 		
-		for d in dl:
+		for d in komponen:
 			nl = self.append('item_utama', {})
 			nl.item_group = d.item_group
 			nl.item_code = d.item_code
@@ -45,6 +45,11 @@ class EstTools(Document):
 			nl.factor_3 = "1"
 			nl.factor_4 = "1"
 			nl.factor_5 = "1"	
+			
+		qq = frappe.db.sql("""select b1.quantity from `tabBOM` b1 where b1.`name` = %s""", self.bill_of_material, as_dict=1)
+		
+		for e in qq:
+			self.quantity = e.quantity
 			
 @frappe.whitelist()
 def test_method(source_name, target_doc=None):
