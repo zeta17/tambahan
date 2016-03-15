@@ -85,14 +85,41 @@ def test_method(source_name, target_doc=None):
 	return doc
 
 @frappe.whitelist()
-def make_estimate(source_name, target_doc=None):
-	est = get_mapped_doc("Quotation Item", source_name, {
-		"Quotation": {
-			"doctype": "Est Tools",
-			"field_map": {
-				"quantity": "qty"
+def get_item_from_quotation(source_name, target_doc=None):
+	est = get_mapped_doc("Quotation", source_name, {
+			"Quotation": {
+				"doctype": "Est Tools",
+				"validation": {
+					"docstatus": ["=", 1]
+				}
 			},
-		},
-	}, target_doc)
+			"Quotation Item": {
+				"doctype": "Est Tools Primary Item",
+				"field_map": {
+					"parent": "prevdoc_docname",
+					"qty": "quantity"
+				},
+			},
+		}, target_doc)
+	
+	return est
+	
+@frappe.whitelist()
+def get_item_from_so(source_name, target_doc=None):
+	est = get_mapped_doc("Sales Order", source_name, {
+			"Sales Order": {
+				"doctype": "Est Tools",
+				"validation": {
+					"docstatus": ["=", 1]
+				}
+			},
+			"Sales Order Item": {
+				"doctype": "Est Tools Primary Item",
+				"field_map": {
+					"parent": "prevdoc_docname",
+					"qty": "quantity"
+				},
+			},
+		}, target_doc)
 	
 	return est

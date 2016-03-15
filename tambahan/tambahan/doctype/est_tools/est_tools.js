@@ -10,6 +10,30 @@ frappe.ui.form.on('Est Tools', {
 
 		calculate_total_quantity(frm);
 		calculate_total_secondary(frm);
+		
+		if(frm.doc.__islocal) {
+			cur_frm.add_custom_button(__('Quotation'),
+				function() {
+					frappe.model.map_current_doc({
+						method: "tambahan.tambahan.doctype.est_tools.est_tools.get_item_from_quotation",
+						source_doctype: "Quotation",
+						get_query_filters: {
+							docstatus: 1,
+							status: ["!=", "Lost"]
+						}
+					})
+				}, __("Get items from"));
+			cur_frm.add_custom_button(__('Sales Order'),
+				function() {
+					frappe.model.map_current_doc({
+						method: "tambahan.tambahan.doctype.est_tools.est_tools.get_item_from_so",
+						source_doctype: "Sales Order",
+						get_query_filters: {
+							docstatus: 1
+						}
+					})
+				}, __("Get items from"));
+		};
 	},
 	get_items_from_bom: function(frm) {
 		return frappe.call({
