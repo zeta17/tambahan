@@ -181,6 +181,31 @@ frappe.ui.form.on("Est Tools Secondary Item", "item_code", function(frm, cdt, cd
 		}
     })
 });
+frappe.ui.form.on("Est Tools Primary Item", "template_factor", function(frm, cdt, cdn) {
+    row = locals[cdt][cdn];
+	frappe.model.set_value(cdt, cdn, "factor_1", "1");
+	frappe.model.set_value(cdt, cdn, "factor_2", "1");
+	frappe.model.set_value(cdt, cdn, "factor_3", "1");
+	frappe.model.set_value(cdt, cdn, "factor_4", "1");
+	frappe.model.set_value(cdt, cdn, "factor_5", "1");
+    frappe.call({
+        method: "frappe.client.get_value",
+        args: {
+            doctype: "Factor",
+            fieldname: ["factor_01","factor_02","factor_03","factor_04","factor_05"],
+            filters: {
+				"name": row.template_factor
+            }
+        },
+        callback: function (data) {
+            frappe.model.set_value(cdt, cdn, "factor_1", data.message.factor_01);
+            frappe.model.set_value(cdt, cdn, "factor_2", data.message.factor_02);
+            frappe.model.set_value(cdt, cdn, "factor_3", data.message.factor_03);
+            frappe.model.set_value(cdt, cdn, "factor_4", data.message.factor_04);
+            frappe.model.set_value(cdt, cdn, "factor_5", data.message.factor_05);
+		}
+    })
+});
 
 
 cur_frm.cscript.si_qty = function(doc, cdt, cdn) {
@@ -239,14 +264,35 @@ frappe.ui.form.on("Est Tools", "faktor_secondary", function(frm) {
 	calculate_faktor_secondary(frm);
 })
 
-/* Grand Total */
-var calculate_grand_total = function(frm) {
-	var grand_total = flt(frm.doc.net_total_primary_item) + flt(frm.doc.net_total_secondary_item);
-	frm.set_value("grand_total", grand_total);
+/* Net Total */
+var calculate_net_total = function(frm) {
+	var net_total = flt(frm.doc.net_total_primary_item) + flt(frm.doc.net_total_secondary_item);
+	frm.set_value("net_total", net_total);
 }
 frappe.ui.form.on("Est Tools", "net_total_secondary_item", function(frm) {
-	calculate_grand_total(frm);
+	calculate_net_total(frm);
 })
 frappe.ui.form.on("Est Tools", "net_total_primary_item", function(frm) {
+	calculate_net_total(frm);
+})
+/* Grand Total */
+var calculate_grand_total = function(frm) {
+	var net_total_after_factor = flt(frm.doc.net_total) * flt(frm.doc.factor_total_1);
+	var grand_total = flt(frm.doc.net_total) * flt(frm.doc.factor_total_1) * flt(frm.doc.factor_total_2);
+	var rounded_total = flt(grand_total) + flt(frm.doc.pembulatan);
+	frm.set_value("net_total_after_factor", net_total_after_factor);
+	frm.set_value("grand_total", grand_total);
+	frm.set_value("rounded_total", rounded_total);
+}
+frappe.ui.form.on("Est Tools", "net_total", function(frm) {
+	calculate_grand_total(frm);
+})
+frappe.ui.form.on("Est Tools", "factor_total_1", function(frm) {
+	calculate_grand_total(frm);
+})
+frappe.ui.form.on("Est Tools", "factor_total_2", function(frm) {
+	calculate_grand_total(frm);
+})
+frappe.ui.form.on("Est Tools", "pembulatan", function(frm) {
 	calculate_grand_total(frm);
 })

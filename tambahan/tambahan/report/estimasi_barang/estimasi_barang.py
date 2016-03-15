@@ -10,7 +10,7 @@ def execute(filters=None):
 	#columns, data = [], []
 	#return columns, data
 	columns = get_columns()
-	sl_entries = get_stock_ledger_entries(filters)
+	sl_entries = get_entries(filters)
 	data = []
 	
 	for sle in sl_entries:
@@ -60,7 +60,7 @@ def get_conditions(filters):
 
 	return conditions
 
-def get_stock_ledger_entries(filters):
+def get_entries(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""select name, project_name, item_code, item_name, bill_of_material, quantity, total_primary_item, posting_date
 		from `tabEst Tools`
