@@ -187,8 +187,11 @@ frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn)
 		}
     })
 });
+
+//secondary item
 frappe.ui.form.on("Est Tools Secondary Item", "item_code", function(frm, cdt, cdn) {
     row = locals[cdt][cdn];
+	frappe.model.set_value(cdt, cdn, "si_price_list_rate", "0");
     frappe.call({
         method: "frappe.client.get_value",
         args: {
@@ -200,8 +203,7 @@ frappe.ui.form.on("Est Tools Secondary Item", "item_code", function(frm, cdt, cd
             }
         },
         callback: function (data) {
-            frappe.model.set_value(cdt, cdn, "si_price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
-			refresh_field()
+            frappe.model.set_value(cdt, cdn, "si_price_list_rate", data.message.price_list_rate); 
 		}
     })
 });
@@ -227,6 +229,31 @@ frappe.ui.form.on("Est Tools Primary Item", "template_factor", function(frm, cdt
             frappe.model.set_value(cdt, cdn, "factor_3", data.message.factor_03);
             frappe.model.set_value(cdt, cdn, "factor_4", data.message.factor_04);
             frappe.model.set_value(cdt, cdn, "factor_5", data.message.factor_05);
+		}
+    })
+});
+frappe.ui.form.on("Est Tools Secondary Item", "template_factor", function(frm, cdt, cdn) {
+    row = locals[cdt][cdn];
+	frappe.model.set_value(cdt, cdn, "si_factor_1", "1");
+	frappe.model.set_value(cdt, cdn, "si_factor_2", "1");
+	frappe.model.set_value(cdt, cdn, "si_factor_3", "1");
+	frappe.model.set_value(cdt, cdn, "si_factor_4", "1");
+	frappe.model.set_value(cdt, cdn, "si_factor_5", "1");
+    frappe.call({
+        method: "frappe.client.get_value",
+        args: {
+            doctype: "Factor",
+            fieldname: ["factor_01","factor_02","factor_03","factor_04","factor_05"],
+            filters: {
+				"name": row.template_factor
+            }
+        },
+        callback: function (data) {
+            frappe.model.set_value(cdt, cdn, "si_factor_1", data.message.factor_01);
+            frappe.model.set_value(cdt, cdn, "si_factor_2", data.message.factor_02);
+            frappe.model.set_value(cdt, cdn, "si_factor_3", data.message.factor_03);
+            frappe.model.set_value(cdt, cdn, "si_factor_4", data.message.factor_04);
+            frappe.model.set_value(cdt, cdn, "si_factor_5", data.message.factor_05);
 		}
     })
 });

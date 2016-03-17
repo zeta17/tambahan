@@ -91,7 +91,10 @@ def get_item_from_quotation(source_name, target_doc=None):
 				"doctype": "Est Tools",
 				"validation": {
 					"docstatus": ["=", 1]
-				}
+				},
+				"field_map": {
+					"transaction_date": "posting_date"
+				},
 			},
 			"Quotation Item": {
 				"doctype": "Est Tools Primary Item",
