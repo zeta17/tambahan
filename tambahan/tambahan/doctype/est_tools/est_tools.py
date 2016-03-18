@@ -52,7 +52,7 @@ class EstTools(Document):
 			self.quantity = e.quantity
 			
 @frappe.whitelist()
-def test_method(source_name, target_doc=None):
+def make_bom(source_name, target_doc=None):
 	doc = get_mapped_doc("Est Tools", source_name, {
 		"Est Tools": {
 			"doctype": "BOM",

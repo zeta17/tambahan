@@ -48,7 +48,7 @@ frappe.ui.form.on('Est Tools', {
 
 cur_frm.cscript['Make BOM'] = function() {
 	frappe.model.open_mapped_doc({
-		method: "tambahan.tambahan.doctype.est_tools.est_tools.test_method",
+		method: "tambahan.tambahan.doctype.est_tools.est_tools.make_bom",
 		frm: cur_frm
 	})
 }

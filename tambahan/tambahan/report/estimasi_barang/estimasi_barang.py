@@ -29,12 +29,12 @@ def get_columns():
 	"""return columns"""
 
 	columns = [
-		_("Est ID")+":Link/Est Tools:120",
+		_("Est ID")+":Link/Est Tools:110",
 		_("Project Name")+":Link/Project:170",
 		_("Item Code")+":Link/Item:150",
 		_("Item Name")+"::150",
 		_("BOM")+":Link/BOM:170",
-		_("Quantity")+":Float:100",
+		_("Quantity")+":Float:80",
 		_("Total Komponen")+":Currency:150",
 		_("Posting Date")+":Date:100"
 	]
