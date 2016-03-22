@@ -34,6 +34,7 @@ frappe.ui.form.on('Est Tools', {
 					})
 				}, __("Get items from"));
 		};
+		//frm.set_df_property("item_utama", "read_only", frm.doc.__islocal ? 0 : 1);
 	},
 	get_items_from_bom: function(frm) {
 		return frappe.call({
@@ -79,11 +80,27 @@ cur_frm.set_query("item_code", "item_utama",  function (doc, cdt, cdn) {
         }
     }
 });
+cur_frm.set_query("template_factor", "item_utama",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'active': 1
+        }
+    }
+});
 cur_frm.set_query("item_code", "item_tambahan",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
             'item_group': c_doc.item_group
+        }
+    }
+});
+cur_frm.set_query("template_factor", "item_tambahan",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'active': 1
         }
     }
 });
@@ -347,3 +364,9 @@ frappe.ui.form.on("Est Tools", "factor_total_2", function(frm) {
 frappe.ui.form.on("Est Tools", "pembulatan", function(frm) {
 	calculate_grand_total(frm);
 })
+frappe.ui.form.on("Est Tools","onload", function(frm, cdt, cdn) {
+	if(frm.doc.docstatus==1){
+		var df = frappe.meta.get_docfield("Est Tools Primary Item","quantity", cur_frm.doc.name);
+		df.read_only = 1;
+	}
+});
