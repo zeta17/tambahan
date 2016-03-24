@@ -11,7 +11,7 @@ frappe.ui.form.on('Est Tools', {
 		calculate_total_quantity(frm);
 		calculate_total_secondary(frm);
 		
-		if(frm.doc.__islocal) {
+		if(frm.doc.__islocal || frm.doc.docstatus==0) {
 			cur_frm.add_custom_button(__('Quotation'),
 				function() {
 					frappe.model.map_current_doc({
@@ -199,8 +199,7 @@ frappe.ui.form.on("Est Tools Primary Item", "item_code", function(frm, cdt, cdn)
             }
         },
         callback: function (data) {
-            frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate); //might need to be data.message[0]
-			//refresh_field()
+            frappe.model.set_value(cdt, cdn, "price_list_rate", data.message.price_list_rate);
 		}
     })
 });

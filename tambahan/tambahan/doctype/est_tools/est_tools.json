@@ -31,7 +31,7 @@
    "print_hide_if_no_value": 0, 
    "read_only": 0, 
    "report_hide": 0, 
-   "reqd": 1, 
+   "reqd": 0, 
    "search_index": 0, 
    "set_only_once": 0, 
    "unique": 0
@@ -927,7 +927,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2016-03-18 16:11:11.878010", 
+ "modified": "2016-03-23 11:21:13.329662", 
  "modified_by": "Administrator", 
  "module": "Tambahan", 
  "name": "Est Tools", 

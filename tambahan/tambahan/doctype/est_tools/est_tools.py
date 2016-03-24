@@ -15,17 +15,20 @@ class EstTools(Document):
 		ym = parser.parse(self.posting_date).strftime('%y%m')
 		self.name = make_autoname("EST-"+ym+".###")
 		
-	#def validate(self):
+	def validate(self):
+		self.total_nol()
 		#pass
 		#frappe.throw(_("Anda pilih: "+self.item_name))
+		
+	def total_nol(self):
+		if(self.grand_total == 0):
+			frappe.throw(_("Please enter Komponen Utama / Komponen Tambahan"))
+	
 	def get_details(self):
-		komponen = frappe.db.sql("""select b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount, b2.item_group
-			from
-				`tabBOM Item` b1, `tabItem` b2
-			where
-				b1.item_code = b2.item_code and
-				b1.parent = %s
-			order by b1.idx ASC""", self.bill_of_material, as_dict=1)
+		komponen = frappe.db.sql("""SELECT b1.item_code, b1.item_name, b1.qty, b1.stock_uom, b1.rate, b1.amount, b2.item_group
+			FROM `tabBOM Item` b1, `tabItem` b2
+			WHERE b1.item_code = b2.item_code AND b1.parent = %s
+			ORDER by b1.idx ASC""", self.bill_of_material, as_dict=1)
 		
 		self.set('item_utama', [])
 		
@@ -46,7 +49,7 @@ class EstTools(Document):
 			nl.factor_4 = "1"
 			nl.factor_5 = "1"	
 			
-		qq = frappe.db.sql("""select b1.quantity from `tabBOM` b1 where b1.`name` = %s""", self.bill_of_material, as_dict=1)
+		qq = frappe.db.sql("""SELECT b1.quantity FROM `tabBOM` b1 WHERE b1.`name` = %s""", self.bill_of_material, as_dict=1)
 		
 		for e in qq:
 			self.quantity = e.quantity
@@ -126,3 +129,20 @@ def get_item_from_so(source_name, target_doc=None):
 		}, target_doc)
 	
 	return est
+
+# ERRPR SAAT UPDATE BENCH VERSION 2
+# error: <class 'xmlrpclib.Fault'>, <Fault 10: 'BAD_NAME: frappe-bench-processes'>: file: /usr/lib/python2.7/xmlrpclib.py line: 794
+# mv config config-bak
+# mkdir -p config/pids
+# sudo supervisorctl stop all
+# sudo service nginx stop
+# bench setup config
+# bench setup redis
+# bench setup supervisor
+# bench setup nginx
+# bench setup procfile
+# sudo bench setup sudoers frappe # or the user that you used to install erpnext
+# sudo nginx -t  # check if this command shows any error 
+# sudo service nginx reload    
+# sudo supervisorctl reread
+# sudo supervisorctl update
