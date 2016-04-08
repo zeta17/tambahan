@@ -8,7 +8,7 @@ app_description = "tambahan"
 app_icon = "icon-lightbulb"
 app_color = "#5A0000"
 app_email = "hendrik.zeta@gmail.com"
-app_version = "0.0.1"
+app_version = "0.0.2"
 app_license = "MIT"
 
 # Includes in <head>
