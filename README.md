@@ -1,6 +1,7 @@
 ## Tambahan
 
-bench get-app https://github.com/zeta17/tambahan.git,
+bench get-app https://github.com/zeta17/tambahan.git
+
 bench install-app tambahan
 
 #### License
