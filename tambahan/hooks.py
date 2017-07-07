@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from . import __version__ as app_version
 
 app_name = "tambahan"
 app_title = "Tambahan"
 app_publisher = "hendrik"
 app_description = "tambahan"
-app_icon = "icon-lightbulb"
+app_icon = "fa fa-bath"
 app_color = "#5A0000"
 app_email = "hendrik.zeta@gmail.com"
-app_version = "0.0.2"
 app_license = "MIT"
 
 # Includes in <head>
