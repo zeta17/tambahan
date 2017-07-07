@@ -7,7 +7,7 @@ def get_data():
 		{
 			"module_name": "Tambahan",
 			"color": "#5A0000",
-			"icon": "icon-lightbulb",
+			"icon": "fa fa-bath",
 			"type": "module",
 			"label": _("Tambahan")
 		}
