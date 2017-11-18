@@ -10,7 +10,7 @@ frappe.ui.form.on('Est Tools', {
 
 		calculate_total_quantity(frm);
 		calculate_total_secondary(frm);
-		
+
 		if(frm.doc.__islocal || frm.doc.docstatus==0) {
 			cur_frm.add_custom_button(__('Quotation'),
 				function() {
@@ -46,7 +46,15 @@ frappe.ui.form.on('Est Tools', {
 		});
 	},
 });
-
+frappe.ui.form.on('Est Tools Primary Item', {
+    item_utama_remove: function(frm) {
+			var total_dn = 0.0;
+			$.each(frm.doc.item_utama, function(i, row) {
+				total_dn += flt(row.net_amount);
+			})
+			frm.set_value("total_primary_item", total_dn);
+    }
+});
 cur_frm.cscript['Make BOM'] = function() {
 	frappe.model.open_mapped_doc({
 		method: "tambahan.tambahan.doctype.est_tools.est_tools.make_bom",
@@ -219,7 +227,7 @@ frappe.ui.form.on("Est Tools Secondary Item", "item_code", function(frm, cdt, cd
             }
         },
         callback: function (data) {
-            frappe.model.set_value(cdt, cdn, "si_price_list_rate", data.message.price_list_rate); 
+            frappe.model.set_value(cdt, cdn, "si_price_list_rate", data.message.price_list_rate);
 		}
     })
 });
